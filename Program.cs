@@ -22,6 +22,32 @@ builder.Services.AddSqlServer<DatabaseContext>(builder.Configuration.GetConnecti
 
 var app = builder.Build();
 
+
+//Note: DO NOT put this code in the builder.Services section above, it will not work there
+//also: DO NOT put this code after app.Run(), it will never be reached there
+//also: DO add-migration when changing schema, this WILL NOT create migrations for you, it only applies them
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        //Get DbContext service
+        var context = services.GetRequiredService<DatabaseContext>();
+
+        //Apply pending migrations (create database if it doesn't exist)
+        context.Database.Migrate();
+
+        //seed data here
+        //example DbInitializer.SeedData(context); make the function there too
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "WHOOPS! An error occurred while migrating or seeding the database.");
+    }
+}
+
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
