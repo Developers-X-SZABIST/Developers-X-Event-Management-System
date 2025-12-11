@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Event_Management_System.Models.Entities
+namespace Event_Management_System.Models.Entities.JAIL
 {
     public class Role
     {

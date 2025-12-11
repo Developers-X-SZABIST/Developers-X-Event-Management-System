@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Event_Management_System.Models.Entities
+namespace Event_Management_System.Models.Entities.JAIL
 {
     public class EventOrganizer
     {

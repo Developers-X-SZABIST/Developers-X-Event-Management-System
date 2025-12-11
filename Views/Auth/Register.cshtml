@@ -1,0 +1,29 @@
+﻿@model Event_Management_System.Models.Entities.User
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>Register</h1>
+
+<form asp-action="Register" method="post">
+    <div class="form-group mb-3">
+        <label asp-for="Username">Enter Username</label>
+        <input asp-for="Username" class="form-control" />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="PasswordHash">Enter Password</label>
+        <input asp-for="PasswordHash" type="password" class="form-control" />
+        <span asp-validation-for="PasswordHash" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-primary">Register</button>
+
+    <div style="float: right; margin-right: 30px; display: flex; align-items: center; gap: 20px; padding: 15px 0;">
+        <p style="margin: 0;">Already Registered?</p>
+        <button style="" class="btn btn-primary" asp-action="Login" asp-controller="Auth">Login</button>
+    </div>
+    
+</form>

@@ -20,6 +20,15 @@ namespace Event_Management_System.Models
         public DbSet<Registration> Registrations { get; set; }
         //public DbSet<EventOrganizer> EventOrganizers { get; set; } //ON HOLD
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+        }
 
+        //what OnModelCreating is doing is that when model gets created it creates an index for Username column
+        //for this step I believe migrations need to be added again
     }
 }

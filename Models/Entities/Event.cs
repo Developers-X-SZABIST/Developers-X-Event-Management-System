@@ -9,6 +9,10 @@ namespace Event_Management_System.Models.Entities
         [Key]
         public int EventId { get; set; }
 
+
+
+
+        
         [Required]
         public string Title { get; set; }
         public string? Description { get; set; }
@@ -24,6 +28,10 @@ namespace Event_Management_System.Models.Entities
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime RegistrationDeadline { get; set; }
+
+
+
+
 
         // Foreign key to link event to its creator (admin user or organizer user )
         //Note ROLES

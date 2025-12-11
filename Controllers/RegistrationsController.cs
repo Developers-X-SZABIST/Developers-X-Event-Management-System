@@ -49,8 +49,8 @@ namespace Event_Management_System.Controllers
         // GET: Registrations/Create
         public IActionResult Create()
         {
-            ViewData["EventId"] = new SelectList(_context.Events, "EventId", "Title");
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
+            ViewBag.Events = new SelectList(_context.Events, "EventId", "Title");
+            ViewBag.Users = new SelectList(_context.Users, "UserId", "Username");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace Event_Management_System.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "EventId", "Title", registration.EventId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", registration.UserId);
+            ViewBag.Events = new SelectList(_context.Events, "EventId", "Title", registration.EventId);
+            ViewBag.Users = new SelectList(_context.Users, "UserId", "Username", registration.UserId);
             return View(registration);
         }
 
@@ -85,8 +85,8 @@ namespace Event_Management_System.Controllers
             {
                 return NotFound();
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "EventId", "Title", registration.EventId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", registration.UserId);
+            ViewBag.Events = new SelectList(_context.Events, "EventId", "Title", registration.EventId);
+            ViewBag.Users = new SelectList(_context.Users, "UserId", "Username", registration.UserId);
             return View(registration);
         }
 
@@ -122,8 +122,8 @@ namespace Event_Management_System.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventId"] = new SelectList(_context.Events, "EventId", "Title", registration.EventId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", registration.UserId);
+            ViewBag.Events = new SelectList(_context.Events, "EventId", "Title", registration.EventId);
+            ViewBag.Users = new SelectList(_context.Users, "UserId", "Username", registration.UserId);
             return View(registration);
         }
 
