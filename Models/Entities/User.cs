@@ -1,8 +1,4 @@
-﻿
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
+﻿using System.ComponentModel.DataAnnotations;
 namespace Event_Management_System.Models.Entities
 {
     public class User
@@ -10,30 +6,23 @@ namespace Event_Management_System.Models.Entities
         [Key]
         public int UserId { get; set; }
 
-
-
-
         public string Username { get; set; }
         public string PasswordHash { get; set; }
-
         public string Email { get; set; }
 
+        // 🔹 Hardcoded roles
+        public string Role { get; set; } = Roles.Public;
 
-
-
-
-        //// Foreign key to link users to their roles
-        //[ForeignKey("Role")]
-        //public int RoleId { get; set; }
-        //public Role Role { get; set; } // Navigation property to Role entity
-
-
-        //Navigation properties
+        // Navigation properties
         public ICollection<Event> CreatedEvents { get; set; } = new List<Event>();
         public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
+    }
 
-        //public ICollection<EventOrganizer> OrganizedEvents { get; set; } = new List<EventOrganizer>(); //tracking which events this user is assigned to as an organizer         //ON HOLD
+    // 🔹 Central place for allowed roles
+    public static class Roles
+    {
+        public const string Admin = "Admin";
+        public const string Organizer = "Organizer";
+        public const string Public = "Public";
     }
 }
-
-//Represents whoever interacts with the system (Admin, Organizer, Participants)
