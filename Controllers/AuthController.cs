@@ -76,8 +76,8 @@ namespace Event_Management_System.Controllers
                 }
 
                 user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
-                user.Role = "Public";
-                _db.Users.Add(user);           
+                //user.Role = "Public";
+                _db.Users.Add(user);
                 await _db.SaveChangesAsync();
                 return RedirectToAction("Login", "Auth");
             }
