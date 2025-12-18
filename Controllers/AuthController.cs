@@ -1,5 +1,6 @@
 ﻿using Event_Management_System.Models;
 using Event_Management_System.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -33,7 +34,7 @@ namespace Event_Management_System.Controllers
                 {
                     var loggedInUser = await _db.Users.FirstOrDefaultAsync(u => u.Username.Equals(user.Username));
 
-                    if (BCrypt.Net.BCrypt.Verify(user.PasswordHash, loggedInUser.PasswordHash))
+                    if (!string.IsNullOrEmpty(loggedInUser.PasswordHash) && BCrypt.Net.BCrypt.Verify(user.PasswordHash, loggedInUser.PasswordHash))
                     {
                         var token = GenerateToken(loggedInUser);
 
@@ -59,6 +60,14 @@ namespace Event_Management_System.Controllers
             return View(user);
         }
 
+        [Authorize] //user needs to be logged in before logging out that is why authorize used here
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("jwt_token"); //remove the token we stored in cookies
+            return RedirectToAction("Index", "Home");
+        }
+
+
         public IActionResult Register()
         {
             return View();
@@ -75,11 +84,29 @@ namespace Event_Management_System.Controllers
                     return View(user);
                 }
 
+                if (string.IsNullOrEmpty(user.PasswordHash))
+                {
+                    ModelState.AddModelError("", "Password is required.");
+                    return View(user);
+                }
+
                 user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
-                //user.Role = "Public";
+                user.Role = "Public"; //by default new users are public 
                 _db.Users.Add(user);
                 await _db.SaveChangesAsync();
-                return RedirectToAction("Login", "Auth");
+
+                //Automatically log in
+                var token = GenerateToken(user);
+
+                Response.Cookies.Append("jwt_token", token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict
+                });
+
+
+                return RedirectToAction("Index", "Home");
             }
 
             return View(user);

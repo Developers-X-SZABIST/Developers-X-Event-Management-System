@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Event_Management_System.Models;
 using Event_Management_System.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Event_Management_System.Controllers
 {
+    //Only Logged In users can register
+    [Authorize]
     public class RegistrationsController : Controller
     {
         private readonly DatabaseContext _context;

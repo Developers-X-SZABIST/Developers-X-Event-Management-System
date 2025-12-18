@@ -3,6 +3,7 @@ using Event_Management_System.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Event_Management_System.Models.Entities;
 
 
 
@@ -11,6 +12,23 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
+
+
+//Connecting to our SQL Server and adding our DatabaseContext as a service
+//And getting the connection string from appsettings.json file (Event_Management_System is defined in appsettings.json)
+
+builder.Services.AddSqlServer<DatabaseContext>(builder.Configuration.GetConnectionString("Event_Management_System") ?? throw new InvalidOperationException("Connection string 'Event_Management_System' not found."));
+
+//if you don't understand the ?? its just a null-coalescing operator to throw an exception if the connection string is not found
+//it just works by checking if the left side of the "??" is null, if it is not then run it, if it is then run the right side of the "??"
+
+
+
+
+
+//JWT Authentication
+//Runs before the request reaches the controller?
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
@@ -40,16 +58,6 @@ builder.Services.AddAuthentication("Bearer")
     });
 
 
-//Connecting to our SQL Server and adding our DatabaseContext as a service
-//And getting the connection string from appsettings.json file (Event_Management_System is defined in appsettings.json)
-
-builder.Services.AddSqlServer<DatabaseContext>(builder.Configuration.GetConnectionString("Event_Management_System") ?? throw new InvalidOperationException("Connection string 'Event_Management_System' not found."));
-
-//if you don't understand the ?? its just a null-coalescing operator to throw an exception if the connection string is not found
-//it just works by checking if the left side of the "??" is null, if it is not then run it, if it is then run the right side of the "??"
-
-
-
 var app = builder.Build();
 
 
@@ -70,6 +78,20 @@ using (var scope = app.Services.CreateScope())
 
         //seed data here
         //example DbInitializer.SeedData(context); make the function there too
+
+        //I added admin seeding here, later will transfer all of this to dbInitializer class
+        if (!context.Users.Any(u => u.Role == Roles.Admin))
+        {
+            var admin = new User
+            {
+                Username = "admin",
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword("AdminPassword123"),
+                Role = Roles.Admin,
+                Email = "admin@domain.com"
+            };
+            context.Users.Add(admin);
+            context.SaveChanges();
+        }
     }
     catch (Exception ex)
     {
@@ -77,6 +99,9 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "WHOOPS! An error occurred while migrating or seeding the database.");
     }
 }
+
+
+
 
 
 // Configure the HTTP request pipeline.

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Event_Management_System.Models;
 using Event_Management_System.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Event_Management_System.Controllers
 {
@@ -20,12 +21,14 @@ namespace Event_Management_System.Controllers
         }
 
         // GET: Events
+        //Public Access
         public async Task<IActionResult> Index()
         {
             return View(await _context.Events.ToListAsync());
         }
 
         // GET: Events/Details/5
+        //Public Access
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +47,8 @@ namespace Event_Management_System.Controllers
         }
 
         // GET: Events/Create
+        //Admin and Organizer Access
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +59,7 @@ namespace Event_Management_System.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)] //add to both get and post
         public async Task<IActionResult> Create([Bind("EventId,Title,Description,EventDate,Location,MaxCapacity,RegistrationDeadline")] Event @event)
         {
             if (ModelState.IsValid)
@@ -66,6 +72,8 @@ namespace Event_Management_System.Controllers
         }
 
         // GET: Events/Edit/5
+        //Admin and Organizer Access
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +94,7 @@ namespace Event_Management_System.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
         public async Task<IActionResult> Edit(int id, [Bind("EventId,Title,Description,EventDate,Location,MaxCapacity,RegistrationDeadline")] Event @event)
         {
             if (id != @event.EventId)
@@ -117,6 +126,8 @@ namespace Event_Management_System.Controllers
         }
 
         // GET: Events/Delete/5
+        //Admin and Organizer Access
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,6 +148,7 @@ namespace Event_Management_System.Controllers
         // POST: Events/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var @event = await _context.Events.FindAsync(id);

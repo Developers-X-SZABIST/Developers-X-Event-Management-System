@@ -1,2 +1,6 @@
 Check Roles and Event Organizer Entities
 
+Need to fix the hardcoded secret key for JWT token
+appsettings then pass configuration to auth controller constructor
+
+

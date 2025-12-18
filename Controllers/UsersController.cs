@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Event_Management_System.Models;
 using Event_Management_System.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Event_Management_System.Controllers
 {
+    //Admin Only Access
+    [Authorize(Roles = Roles.Admin)]
     public class UsersController : Controller
     {
         private readonly DatabaseContext _context;
@@ -58,6 +61,18 @@ namespace Event_Management_System.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                if (!string.IsNullOrEmpty(user.PasswordHash))
+                {
+                    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.PasswordHash);
+                }
+
+                // Default role if none provided
+                if (string.IsNullOrEmpty(user.Role))
+                {
+                    user.Role = Roles.Public;
+                }
+
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,31 +101,41 @@ namespace Event_Management_System.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,PasswordHash,Email")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Username,Email,Role")] User user)
         {
             if (id != user.UserId)
-            {
                 return NotFound();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(user);
+                    // Fetch user from DB
+                    var dbUser = await _context.Users.FindAsync(id);
+                    if (dbUser == null) return NotFound();
+
+                    // Update editable fields
+                    dbUser.Username = user.Username;
+                    dbUser.Email = user.Email;
+
+                   
+
+                    // Only Admin can update Role
+                    if (User.IsInRole(Roles.Admin))
+                    {
+                        dbUser.Role = user.Role;
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.UserId))
-                    {
+                    if (!_context.Users.Any(e => e.UserId == user.UserId))
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
             return View(user);
@@ -153,5 +178,25 @@ namespace Event_Management_System.Controllers
         {
             return _context.Users.Any(e => e.UserId == id);
         }
+
+
+        //Here Action Level Authentication for Admin
+        //Only Admin can set roles
+        //[Authorize(Roles = Roles.Admin)]
+        //public async Task<IActionResult> SetRole(int id, string role)
+        //{
+        //    var user = await _context.Users.FindAsync(id);
+        //    if (user == null) return NotFound();
+
+        //    if (role != Roles.Public && role != Roles.Organizer && role != Roles.Admin)
+        //        return BadRequest("Invalid role");
+
+        //    user.Role = role;
+        //    _context.Update(user);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
+
+        //Implemented in edit view directly so redundant
     }
 }
