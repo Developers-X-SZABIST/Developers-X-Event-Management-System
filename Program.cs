@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
@@ -38,7 +39,6 @@ builder.Services.AddAuthentication("Bearer")
             )
         };
     });
-
 
 //Connecting to our SQL Server and adding our DatabaseContext as a service
 //And getting the connection string from appsettings.json file (Event_Management_System is defined in appsettings.json)
@@ -98,6 +98,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Auth}/{action=Login}/{id?}");
+
 
 app.Run();
