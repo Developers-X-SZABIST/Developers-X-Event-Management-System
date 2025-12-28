@@ -21,42 +21,50 @@ namespace Event_Management_System.Controllers
         // GET: Login
         public IActionResult Login()
         {
-            return View();
+            if (!User.IsInRole(Roles.Admin) && !User.IsInRole(Roles.Organizer) && !User.IsInRole(Roles.Public))
+            {
+                return View();
+            }
+            return RedirectToAction("Index", "Home");
         }
 
         // POST: Login
         [HttpPost]
         public async Task<IActionResult> Login(User user)
         {
-            if (ModelState.IsValid)
+            if (!User.IsInRole(Roles.Admin) && !User.IsInRole(Roles.Organizer) && !User.IsInRole(Roles.Public))
             {
-                var loggedInUser = await _db.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
-                if (loggedInUser != null)
+                if (ModelState.IsValid)
                 {
-                    if (BCrypt.Net.BCrypt.Verify(user.PasswordHash, loggedInUser.PasswordHash))
+                    var loggedInUser = await _db.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
+                    if (loggedInUser != null)
                     {
-                        var token = GenerateToken(loggedInUser);
-                        Response.Cookies.Append("jwt_token", token, new CookieOptions
+                        if (BCrypt.Net.BCrypt.Verify(user.PasswordHash, loggedInUser.PasswordHash))
                         {
-                            HttpOnly = true,
-                            Secure = true,
-                            SameSite = SameSiteMode.Strict
-                        });
+                            var token = GenerateToken(loggedInUser);
+                            Response.Cookies.Append("jwt_token", token, new CookieOptions
+                            {
+                                HttpOnly = true,
+                                Secure = true,
+                                SameSite = SameSiteMode.Strict
+                            });
 
-                        return RedirectToAction("Index", "Home");
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            ViewBag.ErroMessage = "Incorrect Password!";
+                        }
                     }
                     else
                     {
-                        ViewBag.ErroMessage = "Incorrect Password!";
+                        ViewBag.ErroMessage = "Incorrect Username!";
                     }
                 }
-                else
-                {
-                    ViewBag.ErroMessage = "Incorrect Username!";
-                }
-            }
 
-            return View(user);
+                return View(user);
+                }
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: Register
