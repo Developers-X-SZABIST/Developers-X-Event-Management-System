@@ -1,42 +1,56 @@
 ﻿@model Event_Management_System.Models.Entities.Registration
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Registration Details";
 }
 
-<h1>Details</h1>
+<div class="max-w-xl mx-auto py-12">
+    <div class="mb-6 px-4 flex justify-between items-center">
+        <div>
+            <p class="text-purple-500 text-[10px] font-black uppercase tracking-widest mb-1">Internal Record</p>
+            <h1 class="text-3xl font-black text-white italic">Registration #@Model.RegistrationId</h1>
+        </div>
+        
+    </div>
 
-<div>
-    <h4>Registration</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RegistrationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RegistrationDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Status)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.User.UserId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Event)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Event.Title)
-        </dd>
-    </dl>
+    <div class="bg-[#161920] border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+
+        
+        <div class="p-8 border-b border-white/5">
+            <span class="text-[10px] font-black uppercase text-gray-500 tracking-widest block mb-4">Attendee Details</span>
+            <h2 class="text-3xl font-bold text-white mb-1">@Model.User.Username</h2>
+            <p class="text-gray-400 text-sm">User Database ID: @Model.UserId</p>
+        </div>
+
+        
+        <div class="p-8 bg-white/[0.01]">
+            <span class="text-[10px] font-black uppercase text-gray-500 tracking-widest block mb-4">Event Assignment</span>
+            <h3 class="text-xl font-bold text-purple-400 mb-1">@Model.Event.Title</h3>
+            <p class="text-gray-400 text-sm">Location: @Model.Event.Location</p>
+        </div>
+
+        
+        <div class="grid grid-cols-2 border-t border-white/10">
+            <div class="p-6 border-r border-white/10">
+                <span class="text-[10px] font-black uppercase text-gray-500 block mb-2">Registration Date</span>
+                <p class="text-white font-bold">@Model.RegistrationDate.ToString("MMM dd, yyyy")</p>
+                <p class="text-gray-500 text-xs">@Model.RegistrationDate.ToString("hh:mm tt")</p>
+            </div>
+            <div class="p-6">
+                <span class="text-[10px] font-black uppercase text-gray-500 block mb-2">Current Status</span>
+                <div class="inline-flex items-center gap-2">
+                    <span class="h-2 w-2 rounded-full bg-purple-500"></span>
+                    <p class="text-white font-bold uppercase text-sm">@Model.Status</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="text-center mt-8">
+        <a asp-action="Index" class="text-[10px] font-black text-gray-500 hover:text-white transition-colors uppercase tracking-widest">
+            ← Back to Registrations List
+        </a>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.RegistrationId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+

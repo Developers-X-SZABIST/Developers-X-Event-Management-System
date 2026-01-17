@@ -1,39 +1,24 @@
 ﻿@model Event_Management_System.Models.Entities.User
-
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Terminate Account";
 }
 
-<h1>Delete</h1>
+<div class="max-w-md mx-auto text-center py-12">
+    <div class="bg-red-500/10 border border-red-500/20 p-12 rounded-[3rem] shadow-2xl">
+        <h1 class="text-4xl font-black text-white mb-4 tracking-tighter">DELETE USER?</h1>
+        <p class="text-gray-400 text-sm mb-8 italic">This will remove <span class="text-white font-bold">@Model.Username</span> and all associated data from the database.</p>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Username)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Username)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PasswordHash)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PasswordHash)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="UserId" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+        <div class="bg-black/40 p-4 rounded-2xl mb-8 border border-white/5">
+            <p class="text-[10px] font-black uppercase text-gray-600 mb-1">Email Address</p>
+            <p class="text-sm font-bold">@Model.Email</p>
+        </div>
+
+        <form asp-action="Delete">
+            <input type="hidden" asp-for="UserId" />
+            <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-red-500/20 mb-4">
+                TERMINATE ACCOUNT
+            </button>
+            <a asp-action="Index" class="text-xs font-bold text-gray-500 hover:text-white uppercase tracking-widest">Keep Account</a>
+        </form>
+    </div>
 </div>

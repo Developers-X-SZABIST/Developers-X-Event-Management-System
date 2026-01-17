@@ -1,49 +1,51 @@
 ﻿@model Event_Management_System.Models.Entities.User
+@using Event_Management_System.Models.Entities
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit User";
 }
 
-<h1>Edit</h1>
+<div class="max-w-2xl mx-auto">
+    <div class="bg-[#161920] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl">
+        <div class="p-8 border-b border-white/5 bg-white/[0.02]">
+            <h2 class="text-xl font-black italic text-purple-500 uppercase tracking-tighter">Edit Credentials</h2>
+        </div>
 
-<h4>User</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Edit" class="p-10 space-y-6">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 text-xs"></div>
             <input type="hidden" asp-for="UserId" />
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
+
+            <input type="hidden" asp-for="PasswordHash" />
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label asp-for="Username" class="text-[10px] font-black uppercase text-gray-500"></label>
+                    <input asp-for="Username" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:border-purple-500 focus:outline-none" />
+                </div>
+
+                <div class="space-y-2">
+                    <label asp-for="Role" class="text-[10px] font-black uppercase text-gray-500"></label>
+                    <select asp-for="Role" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:border-purple-500 focus:outline-none appearance-none">
+                        <option value="@Roles.Admin">@Roles.Admin</option>
+                        <option value="@Roles.Organizer">@Roles.Organizer</option>
+                        <option value="@Roles.Public">@Roles.Public</option>
+                    </select>
+                </div>
+
+                <div class="md:col-span-2 space-y-2">
+                    <label asp-for="Email" class="text-[10px] font-black uppercase text-gray-500"></label>
+                    <input asp-for="Email" class="w-full bg-black/40 border border-white/10 rounded-xl p-4 text-white focus:border-purple-500 focus:outline-none" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="PasswordHash" class="control-label"></label>
-                <input asp-for="PasswordHash" class="form-control" />
-                <span asp-validation-for="PasswordHash" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
-                <input asp-for="Role" class="form-control" />
-                <span asp-validation-for="Role" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="pt-6 flex gap-4">
+                <button type="submit" class="flex-grow bg-purple-600 hover:bg-purple-700 text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-purple-600/20">
+                    UPDATE USER
+                </button>
+                <a asp-action="Index" class="px-8 flex items-center justify-center border border-white/10 rounded-2xl text-xs font-bold hover:bg-white/5 transition-all">
+                    CANCEL
+                </a>
             </div>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

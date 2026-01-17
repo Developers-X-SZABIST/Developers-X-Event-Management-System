@@ -1,162 +1,105 @@
-﻿@{
+﻿@model List<Event_Management_System.Models.Entities.Event>
+
+@{
     ViewData["Title"] = "Home Page";
+    var userIdString = User.FindFirst("UserId")?.Value;
+    int currentUserId = string.IsNullOrEmpty(userIdString) ? 0 : int.Parse(userIdString);
 }
 
-<div class="text-center">
-    
-    <h1 style="line-height: 1.5em; margin-top: 30px;" class="">Events! <br>
-       For Eventful People</h1>
+<div class="mb-16">
+    <h1 class="text-5xl md:text-6xl font-black mb-4 tracking-tight">
+        Events! <br />
+        <span class="text-purple-500 italic">For Eventful People</span>
+    </h1>
+    <div class="h-1.5 w-24 bg-purple-600 rounded-full"></div>
 </div>
 
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var ev in Model)
+        {
+            //logic for max capacity and registration status
+            int.TryParse(ev.MaxCapacity, out int max);
+            int registeredCount = ev.Registrations?.Count ?? 0;
+            int seatsLeft = max - registeredCount;
+            bool isFull = seatsLeft <= 0;
+            bool isAlreadyRegistered = ev.Registrations?.Any(r => r.UserId == currentUserId) ?? false;
 
-@* <div style="text-align: center; margin-top: 30px;" class="d-grid gap-2">
-  <a asp-action="Login" asp-controller="Auth"><button style="border: 4px solid black; border-radius: 20px" border-radius: 20px" class="btn btn-lg btn-primary" type="button"> Login</button></a>
+                    <div class="group bg-[#161920] border @(isAlreadyRegistered ? "border-purple-500" : "border-white/5") rounded-2xl p-8 flex flex-col h-[420px] hover:border-purple-500/50 hover:-translate-y-2 transition-all duration-300 shadow-xl relative overflow-hidden">
 
-</div>
+                @if (isAlreadyRegistered)
+                {
+                                <div class="absolute top-0 right-0 bg-purple-500 text-white text-[9px] font-black px-4 py-1 uppercase tracking-tighter">My Event</div>
+                }
 
-<div style="text-align: center; margin-top: 30px;" class="d-grid gap-2">
-  <a asp-action="Register" asp-controller="Auth"><button style="border: 4px solid black; border-radius: 20px" class="btn btn-lg btn-primary" type="button"> Sign Up</button></a>
-  
-</div> *@
+                        <div class="flex-grow overflow-hidden">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-black @(isFull ? "text-red-500" : "text-purple-400") uppercase tracking-widest">
+                            @(isFull ? "Event Seats Are Full" : "Seats Available")
+                                </span>
+                                <span class="text-[10px] font-black text-gray-600 uppercase">@ev.Location</span>
+                            </div>
 
+                            <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-purple-400 transition-colors">@ev.Title</h3>
 
+                            <div class="mb-6">
+                                <div class="flex justify-between items-end mb-1">
+                                    <p class="text-[10px] font-black text-gray-500 uppercase">Availability</p>
+                                    <p class="text-[10px] font-black text-white uppercase">@seatsLeft / @max Left</p>
+                                </div>
+                                <div class="w-full bg-white/5 h-1 rounded-full overflow-hidden">
+                                    <div class="bg-purple-600 h-full transition-all duration-500" style="width: @(max > 0 ? (registeredCount * 100 / max) : 0)%"></div>
+                                </div>
+                            </div>
 
-<div style="text-align: center; margin-top: 30px;" class="d-grid gap-2">
-  <a asp-action="Index" asp-controller="Events"><button style="border: 4px solid black; border-radius: 20px" border-radius: 20px" class="btn btn-lg btn-primary" type="button"> See Da Events</button></a>
+                            <div class="text-gray-400 text-sm leading-relaxed h-20 overflow-hidden">
+                                <p class="break-words line-clamp-3">
+                            @ev.Description
+                                </p>
+                            </div>
+                        </div>
 
-</div>
-<div style="display:flex; gap: 40px; margin-top: 45px;">
+                        <div class="mt-6 pt-6 border-t border-white/10 flex items-center justify-between">
+                            <div>
+                                <p class="text-[10px] text-gray-500 uppercase font-black">Deadline</p>
+                                <p class="text-sm font-bold text-white">@ev.RegistrationDeadline.ToString("MMM dd")</p>
+                            </div>
 
-
-<div class="card shadow-sm" style="max-width: 22rem;">
-
-    <!-- Event Image (optional) -->
-    <img src="event-image.jpg" class="card-img-top" alt="Event Image">
-
-    <!-- If you want TEXT instead of image, remove img and use this:
-    <div class="card-header text-center fw-bold">
-      Event Title
-    </div>
-    -->
-
-    <div class="card-body">
-        <h5 class="card-title">Tech Conference 2025</h5>
-        <p class="card-text">
-            Join us for an exciting tech event featuring talks, networking,
-            and workshops.
-        </p>
-    </div>
-
-    <!-- Footer -->
-    <div class="card-footer d-flex justify-content-between align-items-center">
-        <a asp-action="Create" asp-controller="Registrations" class="btn btn-primary btn-sm">
-            Register
-        </a>
-        <small class="text-muted">
-            Deadline: 25 Oct 2025
-        </small>
-    </div>
-
-</div>
-
-
-
-<div class="card shadow-sm" style="max-width: 22rem;">
-
-    <!-- Event Image (optional) -->
-    <img src="event-image.jpg" class="card-img-top" alt="Event Image">
-
-    <!-- If you want TEXT instead of image, remove img and use this:
-    <div class="card-header text-center fw-bold">
-      Event Title
-    </div>
-    -->
-
-    <div class="card-body">
-        <h5 class="card-title">Tech Conference 2025</h5>
-        <p class="card-text">
-            Join us for an exciting tech event featuring talks, networking,
-            and workshops.
-        </p>
-    </div>
-
-    <!-- Footer -->
-    <div class="card-footer d-flex justify-content-between align-items-center">
-            <a asp-action="Register" asp-controller="Auth" class="btn btn-primary btn-sm">
-            Register
-        </a>
-        <small class="text-muted">
-            Deadline: 25 Oct 2025
-        </small>
-    </div>
-
-</div>
-
-
-
-
-<div class="card shadow-sm" style="max-width: 22rem;">
-
-    <!-- Event Image (optional) -->
-    <img src="event-image.jpg" class="card-img-top" alt="Event Image">
-
-    <!-- If you want TEXT instead of image, remove img and use this:
-    <div class="card-header text-center fw-bold">
-      Event Title
-    </div>
-    -->
-
-    <div class="card-body">
-        <h5 class="card-title">Tech Conference 2025</h5>
-        <p class="card-text">
-            I am Mustafa Muhammad , Your System is HACKED :/
-        </p>
-    </div>
-
-    <!-- Footer -->
-    <div class="card-footer d-flex justify-content-between align-items-center">
-        <a href="#" class="btn btn-primary btn-sm">
-            Register
-        </a>
-        <small class="text-muted">
-            Deadline: 25 Oct 2025
-        </small>
-    </div>
-
-</div>
-
-
-
-<div class="card shadow-sm" style="max-width: 22rem;">
-
-    <!-- Event Image (optional) -->
-    <img src="event-image.jpg" class="card-img-top" alt="Event Image">
-
-    <!-- If you want TEXT instead of image, remove img and use this:
-    <div class="card-header text-center fw-bold">
-      Event Title
-    </div>
-    -->
-
-    <div class="card-body">
-        <h5 class="card-title">Tech Conference 2025</h5>
-        <p class="card-text">
-            Join us for an exciting tech event featuring talks, networking,
-            and workshops.
-        </p>
-    </div>
-
-    <!-- Footer -->
-    <div class="card-footer d-flex justify-content-between align-items-center">
-        <a href="#" class="btn btn-primary btn-sm">
-            Register
-        </a>
-        <small class="text-muted">
-            Deadline: 25 Oct 2025
-        </small>
-    </div>
-
-</div>
-
-
+                    @if (isAlreadyRegistered)
+                    {
+                                    <span class="text-purple-500 font-black text-xs uppercase tracking-widest italic">Registered</span>
+                    }
+                    else if (isFull)
+                    {
+                                    <span class="text-red-500 font-black text-xs uppercase tracking-widest">Full</span>
+                    }
+                    else
+                    {
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                        <a asp-action="RegisterConfirm" asp-controller="Events" asp-route-id="@ev.EventId" 
+                           class="bg-white text-black px-6 py-2.5 rounded-xl text-xs font-black uppercase hover:bg-purple-500 hover:text-white transition-all shadow-lg shadow-black/20">
+                            Register
+                        </a>
+                        }
+                        else
+                        {
+                        <a asp-action="Login" asp-controller="Auth" 
+                           asp-route-returnUrl="/Events/RegisterConfirm/@ev.EventId" 
+                           class="bg-white text-black px-6 py-2.5 rounded-xl text-xs font-black uppercase hover:bg-purple-500 hover:text-white transition-all shadow-lg shadow-black/20">
+                            Login to Register
+                        </a>
+                        }
+                    }
+                        </div>
+                    </div>
+        }
+    }
+    else
+    {
+            <div class="col-span-full py-20 text-center bg-[#161920] border-2 border-dashed border-white/5 rounded-3xl">
+                <p class="text-gray-600 font-bold uppercase tracking-widest">No upcoming events live right now</p>
+            </div>
+    }
 </div>

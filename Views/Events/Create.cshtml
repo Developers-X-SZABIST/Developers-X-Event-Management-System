@@ -1,59 +1,61 @@
 ﻿@model Event_Management_System.Models.Entities.Event
-
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-12">
+    <div class="md:w-1/3">
+        <h1 class="text-5xl font-black tracking-tighter mb-6">NEW<br /><span class="text-purple-500 italic">EVENT.</span></h1>
+        <p class="text-gray-500 text-sm leading-relaxed mb-8">
+            Fill in the details to launch your next experience. All fields can be modified later from the management dashboard.
+        </p>
+        <div class="p-6 border border-purple-500/20 rounded-2xl bg-purple-500/5">
+            <h4 class="text-xs font-black uppercase text-purple-400 mb-2">Pro Tip</h4>
+            <p class="text-xs text-gray-400">Clear descriptions and precise locations help increase registration rates by up to 40%.</p>
+        </div>
+    </div>
 
-<h4>Event</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+    <div class="md:w-2/3 bg-[#161920] border border-white/5 p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 right-0 p-8 text-white/5 font-black text-6xl select-none">CREATE</div>
+
+        <form asp-action="Create" class="space-y-6 relative z-10">
+            <div asp-validation-summary="ModelOnly" class="text-red-500 text-xs"></div>
+
+            <div class="space-y-4">
+                <label asp-for="Title" class="text-[10px] font-black uppercase tracking-widest text-gray-500"></label>
+                <input asp-for="Title" placeholder="Event Name" class="w-full bg-black/40 border-b-2 border-white/10 p-4 text-xl font-bold focus:outline-none focus:border-purple-500 transition-all placeholder:text-white/10" />
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+
+            <div class="grid grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label asp-for="EventDate" class="text-[10px] font-black uppercase text-gray-500"></label>
+                    <input asp-for="EventDate" type="date" class="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm focus:border-purple-500 focus:outline-none" />
+                </div>
+                <div class="space-y-2">
+                    <label asp-for="RegistrationDeadline" class="text-[10px] font-black uppercase text-gray-500"></label>
+                    <input asp-for="RegistrationDeadline" type="date" class="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm focus:border-purple-500 focus:outline-none" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="EventDate" class="control-label"></label>
-                <input asp-for="EventDate" type="date" class="form-control" /> <!--added type=date"-->
-                <span asp-validation-for="EventDate" class="text-danger"></span>
+
+            <div class="space-y-2">
+                <label asp-for="Description" class="text-[10px] font-black uppercase text-gray-500"></label>
+                <textarea asp-for="Description" rows="4" placeholder="What is this event about?" class="w-full bg-black/20 border border-white/10 rounded-2xl p-4 text-sm focus:border-purple-500 focus:outline-none"></textarea>
             </div>
-            <div class="form-group">
-                <label asp-for="RegistrationDeadline" class="control-label"></label>
-                <input asp-for="RegistrationDeadline" type="date" class="form-control" /> <!--added type=date"-->
-                <span asp-validation-for="RegistrationDeadline" class="text-danger"></span>
+
+            <div class="flex gap-4">
+                <div class="flex-grow space-y-2">
+                    <label asp-for="Location" class="text-[10px] font-black uppercase text-gray-500"></label>
+                    <input asp-for="Location" class="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm focus:border-purple-500 focus:outline-none" />
+                </div>
+                <div class="w-1/3 space-y-2">
+                    <label asp-for="MaxCapacity" class="text-[10px] font-black uppercase text-gray-500"></label>
+                    <input asp-for="MaxCapacity" class="w-full bg-black/20 border border-white/10 rounded-xl p-3 text-sm focus:border-purple-500 focus:outline-none" />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxCapacity" class="control-label"></label>
-                <input asp-for="MaxCapacity" class="form-control" />
-                <span asp-validation-for="MaxCapacity" class="text-danger"></span>
-            </div>
-            
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
+
+            <button type="submit" class="w-full bg-white text-black hover:bg-purple-500 hover:text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-white/5">
+                PUBLISH EVENT
+            </button>
         </form>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

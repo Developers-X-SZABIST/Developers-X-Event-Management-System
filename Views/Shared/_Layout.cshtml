@@ -1,156 +1,90 @@
-﻿
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Event_Management_System</title>
-
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/bootswatch-css/bootstrap.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Event_Management_System.styles.css" asp-append-version="true" />
-
-   
+    <title>@ViewData["Title"] - EventX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .nav-link-active {
+            color: #a855f7; 
+            border-bottom: 2px solid #a855f7;
+        }
+    </style>
 </head>
+<body class="bg-[#0f1115] text-white font-sans min-h-screen flex flex-col">
+    <header class="bg-[#161920]/95 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
+        <nav class="max-w-6xl mx-auto px-6 h-20 flex justify-between items-center">
 
-<body>
-    <header>
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-bold fs-3 text-white"
-                   asp-controller="Home" asp-action="Index">
-                    EventX
+            <div class="flex items-center gap-12">
+                <a asp-controller="Home" asp-action="Index" class="text-3xl font-black tracking-tighter text-purple-500 hover:text-purple-400 transition-all">
+                    EVENTX
                 </a>
 
-                <button class="navbar-toggler" type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarColor01">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <div class="flex items-center gap-8">
+                    
 
-                <div class="collapse navbar-collapse" id="navbarColor01">
-
-                    <!-- LEFT NAV -->
-                    <ul class="navbar-nav me-auto">
-
-                        <!-- EVENTS -->
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle fw-bold fs-5"
-                               data-bs-toggle="dropdown" href="#">
-                                Events
-                            </a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item"
-                                   asp-controller="Events"
-                                   asp-action="Index">
-                                    View All
-                                </a>
-
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a class="dropdown-item"
-                                       asp-controller="Events"
-                                       asp-action="Create">
-                                        Create
-                                    </a>
-                                }
-                            </div>
-                        </li>
-
-                        <!-- USERS (Admin only) -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle fw-bold fs-5"
-                                   data-bs-toggle="dropdown" href="#">
-                                    Users
-                                </a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item"
-                                       asp-controller="Users"
-                                       asp-action="Index">
-                                        View All
+                                    <a asp-controller="Events" asp-action="Index" 
+                               class="text-sm font-black tracking-widest uppercase hover:text-purple-400 transition-colors leading-none pt-1">
+                                Events
+                            </a>
+                                    <a asp-controller="Users" asp-action="Index" 
+                                       class="text-sm font-black tracking-widest text-gray-400 hover:text-white transition-colors uppercase leading-none pt-1">
+                                        Users
                                     </a>
-                                    <a class="dropdown-item"
-                                       asp-controller="Users"
-                                       asp-action="Create">
-                                        Create
+                        }
+
+                        @if (User.IsInRole("Admin") || User.IsInRole("Organizer"))
+                        {
+                                    <a asp-controller="Registrations" asp-action="Index" 
+                                       class="text-sm font-black tracking-widest text-gray-400 hover:text-white transition-colors uppercase leading-none pt-1">
+                                        Registrations
                                     </a>
-                                </div>
-                            </li>
                         }
-                    </ul>
-
-                    <!-- SEARCH -->
-                    <form class="d-flex me-3">
-                        <input class="form-control me-sm-2"
-                               type="search"
-                               placeholder="Not Implemented">
-                        <button class="btn btn-secondary" type="submit">
-                            Search
-                        </button>
-                    </form>
-
-                    <!-- RIGHT AUTH -->
-                    <ul class="navbar-nav">
-                        @if (!User.Identity.IsAuthenticated)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Auth"
-                                   asp-action="Login">
-                                    Login
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   asp-controller="Auth"
-                                   asp-action="Register">
-                                    Register
-                                </a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item">
-                                <span class="nav-link fw-bold text-light">
-                                    @User.Identity.Name
-                                </span>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-warning"
-                                   asp-controller="Auth"
-                                   asp-action="Logout">
-                                    Logout
-                                </a>
-                            </li>
-                        }
-                    </ul>
-
+                    }
                 </div>
+            </div>
+
+            <div class="flex items-center gap-6">
+                @if (!User.Identity.IsAuthenticated)
+                {
+                        <a asp-controller="Auth" asp-action="Login" class="text-sm font-black tracking-widest uppercase hover:text-purple-400 transition-colors">Login</a>
+                        <a asp-controller="Auth" asp-action="Register" class="bg-purple-600 px-8 py-3 rounded-xl text-sm font-black tracking-wider hover:bg-purple-700 transition-all shadow-lg shadow-purple-500/30 uppercase">
+                            Sign Up
+                        </a>
+                }
+                else
+                {
+                        <div class="flex items-center gap-6 pl-8 border-l border-white/20">
+                            <div class="flex flex-col items-end justify-center">
+                                <span class="text-sm font-black text-purple-500 leading-none mb-1">@User.Identity.Name</span>
+                                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest leading-none">
+                                @((User.IsInRole("Admin")) ? "Admin" : (User.IsInRole("Organizer") ? "Organizer" : "Public"))
+                                </span>
+                            </div>
+                            <a asp-controller="Auth" asp-action="Logout" 
+                               class="text-xs font-black text-red-500 hover:text-white border border-red-500/20 px-4 py-2 rounded-lg transition-all hover:bg-red-600 uppercase">
+                                Logout
+                            </a>
+                        </div>
+                }
             </div>
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <main class="max-w-6xl mx-auto px-6 py-12 flex-grow w-full">
+        @RenderBody()
+    </main>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Event_Management_System
-        </div>
+    <footer class="text-center py-12 border-t border-white/5 text-gray-600 text-xs font-black tracking-[0.2em] uppercase">
+        &copy; 2026 Event Management System
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

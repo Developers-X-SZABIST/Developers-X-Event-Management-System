@@ -2,28 +2,32 @@
 using Event_Management_System.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Event_Management_System.Controllers
 {
-    [Authorize] // 🔒 Everything here requires login
+    
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly DatabaseContext _context;
+
+        public HomeController(DatabaseContext context)
         {
-            _logger = logger;
+            _context = context;
+        }
+        public async Task<IActionResult> Index()
+        {
+            // Filter out past deadlines and include registrations for seat counting
+            var events = await _context.Events
+                .Include(e => e.Registrations)
+                .Where(e => e.RegistrationDeadline >= DateTime.Now)
+                .OrderBy(e => e.RegistrationDeadline)
+                .ToListAsync();
+
+            return View(events);
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

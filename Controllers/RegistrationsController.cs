@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Event_Management_System.Models;
 using Event_Management_System.Models.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Event_Management_System.Controllers
 {
+    [Authorize(Roles = "Admin, Organizer")]
     public class RegistrationsController : Controller
     {
         private readonly DatabaseContext _context;
@@ -38,6 +40,7 @@ namespace Event_Management_System.Controllers
                 .Include(r => r.Event)
                 .Include(r => r.User)
                 .FirstOrDefaultAsync(m => m.RegistrationId == id);
+
             if (registration == null)
             {
                 return NotFound();

@@ -1,54 +1,44 @@
 ﻿@model Event_Management_System.Models.Entities.Event
 
-@{
-    ViewData["Title"] = "Details";
-}
+<div class="max-w-4xl mx-auto">
+    <a asp-action="Index" class="text-xs font-bold text-purple-500 uppercase tracking-widest hover:text-purple-400">← Back to Events</a>
 
-<h1>Details</h1>
+    <div class="mt-6 bg-[#161920] border border-white/5 rounded-[2rem] overflow-hidden shadow-2xl">
+        <div class="h-2 bg-gradient-to-r from-purple-600 to-purple-400"></div>
 
-<div>
-    <h4>Event</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.EventDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EventDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.MaxCapacity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.MaxCapacity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RegistrationDeadline)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RegistrationDeadline)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.EventId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+        <div class="p-10">
+            <div class="flex flex-col md:flex-row justify-between items-start gap-6">
+                <div class="flex-grow">
+                    <h1 class="text-5xl font-black tracking-tighter text-white mb-4">@Model.Title</h1>
+                    <p class="text-gray-400 leading-relaxed text-lg max-w-2xl">@Model.Description</p>
+                </div>
+
+                <div class="bg-[#0f1115] p-6 rounded-2xl border border-white/5 min-w-[200px]">
+                    <span class="text-[10px] font-black text-gray-500 uppercase tracking-widest block mb-1">Entry Status</span>
+                    <span class="text-green-500 font-bold text-sm flex items-center gap-2">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> Open for Registration
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 pt-10 border-t border-white/5">
+                <div class="space-y-1">
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Date & Time</p>
+                    <p class="text-white font-bold">@Model.EventDate.ToString("MMM dd, yyyy")</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Location</p>
+                    <p class="text-white font-bold">@Model.Location</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Capacity</p>
+                    <p class="text-white font-bold">@Model.MaxCapacity People</p>
+                </div>
+                <div class="space-y-1">
+                    <p class="text-[10px] font-black text-gray-500 uppercase tracking-widest">Deadline</p>
+                    <p class="text-purple-400 font-bold">@Model.RegistrationDeadline.ToShortDateString()</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

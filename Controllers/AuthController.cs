@@ -37,11 +37,13 @@ namespace Event_Management_System.Controllers
                 if (ModelState.IsValid)
                 {
                     var loggedInUser = await _db.Users.FirstOrDefaultAsync(u => u.Username == user.Username);
+
                     if (loggedInUser != null)
                     {
                         if (BCrypt.Net.BCrypt.Verify(user.PasswordHash, loggedInUser.PasswordHash))
                         {
                             var token = GenerateToken(loggedInUser);
+
                             Response.Cookies.Append("jwt_token", token, new CookieOptions
                             {
                                 HttpOnly = true,
@@ -109,11 +111,13 @@ namespace Event_Management_System.Controllers
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role, user.Role ?? Roles.Public)
-            };
+            new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role ?? Roles.Public),
+            new Claim("UserId", user.UserId.ToString())
+    };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF32.GetBytes("class-work-5E"));
+            
+            var key = new SymmetricSecurityKey(Encoding.UTF32.GetBytes("class-work-5E-SECRET-KEY-MUST-BE-LONG"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(

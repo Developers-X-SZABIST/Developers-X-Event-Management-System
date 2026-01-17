@@ -1,59 +1,48 @@
 ﻿@model Event_Management_System.Models.Entities.Event
-
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<div class="max-w-3xl mx-auto">
+    <div class="flex items-center gap-2 mb-6">
+        <span class="bg-purple-600/20 text-purple-400 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest">Editing Mode</span>
+        <div class="h-px flex-grow bg-white/5"></div>
+        <a asp-action="Index" class="text-xs font-bold text-gray-500 hover:text-white transition-colors">CANCEL</a>
+    </div>
 
-<h4>Event</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="EventId" />
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="EventDate" class="control-label"></label>
-                <input asp-for="EventDate" class="form-control" />
-                <span asp-validation-for="EventDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxCapacity" class="control-label"></label>
-                <input asp-for="MaxCapacity" class="form-control" />
-                <span asp-validation-for="MaxCapacity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RegistrationDeadline" class="control-label"></label>
-                <input asp-for="RegistrationDeadline" class="form-control" />
-                <span asp-validation-for="RegistrationDeadline" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="bg-gradient-to-b from-[#1a1d24] to-[#161920] border border-white/10 rounded-3xl p-1 shadow-2xl">
+        <div class="bg-[#161920] rounded-[calc(1.5rem-1px)] p-10">
+            <h2 class="text-2xl font-bold mb-10 border-l-4 border-purple-500 pl-6">Modify Settings</h2>
+
+            <form asp-action="Edit" class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+                <input type="hidden" asp-for="EventId" />
+
+                <div class="md:col-span-2 group">
+                    <label asp-for="Title" class="text-[10px] font-bold text-gray-500 uppercase mb-2 block group-focus-within:text-purple-400 transition-colors"></label>
+                    <input asp-for="Title" class="w-full bg-white/5 border border-white/5 rounded-lg px-4 py-3 focus:bg-white/10 focus:outline-none focus:ring-2 ring-purple-500/20 transition-all" />
+                </div>
+
+                <div class="md:col-span-2">
+                    <label asp-for="Description" class="text-[10px] font-bold text-gray-500 uppercase mb-2 block"></label>
+                    <textarea asp-for="Description" rows="3" class="w-full bg-white/5 border border-white/5 rounded-lg px-4 py-3 focus:bg-white/10 focus:outline-none"></textarea>
+                </div>
+
+                <div class="space-y-2">
+                    <label asp-for="EventDate" class="text-[10px] font-bold text-gray-500 uppercase"></label>
+                    <input asp-for="EventDate" type="date" class="w-full bg-white/5 border border-white/5 rounded-lg px-4 py-3 text-sm focus:outline-none" />
+                </div>
+
+                <div class="space-y-2">
+                    <label asp-for="Location" class="text-[10px] font-bold text-gray-500 uppercase"></label>
+                    <input asp-for="Location" class="w-full bg-white/5 border border-white/5 rounded-lg px-4 py-3 text-sm focus:outline-none" />
+                </div>
+
+                <div class="md:col-span-2 pt-6">
+                    <button type="submit" class="bg-purple-600 hover:bg-purple-500 text-white w-full py-4 rounded-xl font-black shadow-lg shadow-purple-600/20 transition-all active:scale-[0.97]">
+                        SAVE UPDATES
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
