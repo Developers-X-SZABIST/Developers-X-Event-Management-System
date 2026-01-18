@@ -34,11 +34,10 @@
                         <td class="p-5 text-purple-400 text-sm font-mono">@item.EventDate.ToShortDateString()</td>
                         <td class="p-5 text-right space-x-3">
                             <a asp-action="Details" asp-route-id="@item.EventId" class="text-xs font-bold text-gray-400 hover:text-white">DETAILS</a>
-                        @if (User.IsInRole("Admin"))
-                        {
-                                    <a asp-action="Edit" asp-route-id="@item.EventId" class="text-xs font-bold text-purple-400 hover:text-purple-300">EDIT</a>
-                                    <a asp-action="Delete" asp-route-id="@item.EventId" class="text-xs font-bold text-red-500 hover:text-red-400">DELETE</a>
-                        }
+                        
+                            <a asp-action="Edit" asp-route-id="@item.EventId" class="text-xs font-bold text-purple-400 hover:text-purple-300">EDIT</a>
+                            <a asp-action="Delete" asp-route-id="@item.EventId" class="text-xs font-bold text-red-500 hover:text-red-400">DELETE</a>
+                        
                         </td>
                     </tr>
             }

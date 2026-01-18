@@ -28,10 +28,7 @@
                     {
                         @if (User.IsInRole("Admin"))
                         {
-                                    <a asp-controller="Events" asp-action="Index" 
-                               class="text-sm font-black tracking-widest uppercase hover:text-purple-400 transition-colors leading-none pt-1">
-                                Events
-                            </a>
+                                    
                                     <a asp-controller="Users" asp-action="Index" 
                                        class="text-sm font-black tracking-widest text-gray-400 hover:text-white transition-colors uppercase leading-none pt-1">
                                         Users
@@ -40,6 +37,10 @@
 
                         @if (User.IsInRole("Admin") || User.IsInRole("Organizer"))
                         {
+                                    <a asp-controller="Events" asp-action="Index" 
+                                       class="text-sm font-black tracking-widest uppercase hover:text-purple-400 transition-colors leading-none pt-1">
+                                        Events
+                                    </a>
                                     <a asp-controller="Registrations" asp-action="Index" 
                                        class="text-sm font-black tracking-widest text-gray-400 hover:text-white transition-colors uppercase leading-none pt-1">
                                         Registrations

@@ -6,7 +6,7 @@ using Event_Management_System.Models.Entities;
 
 namespace Event_Management_System.Controllers
 {
-    [Authorize(Roles = Roles.Admin)]
+    [Authorize]
     public class EventsController : Controller
     {
         private readonly DatabaseContext _context;
@@ -33,8 +33,9 @@ namespace Event_Management_System.Controllers
             return View(@event);
         }
 
-        
-        [Authorize(Roles = Roles.Admin)]
+
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
+
         public IActionResult Create()
         {
             return View();
@@ -43,7 +44,8 @@ namespace Event_Management_System.Controllers
        // CREATE POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
+
         public async Task<IActionResult> Create(Event @event)
         {
             if (ModelState.IsValid)
@@ -56,7 +58,8 @@ namespace Event_Management_System.Controllers
         }
 
         // EDIT GET
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -70,7 +73,8 @@ namespace Event_Management_System.Controllers
         // EDIT POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
+
         public async Task<IActionResult> Edit(int id, Event @event)
         {
             if (id != @event.EventId) return NotFound();
@@ -84,8 +88,8 @@ namespace Event_Management_System.Controllers
             return View(@event);
         }
 
-        // ADMIN ONLY
-        [Authorize(Roles = Roles.Admin)]
+        // ADMIN ONLY   
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -99,7 +103,8 @@ namespace Event_Management_System.Controllers
         // ADMIN ONLY
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = Roles.Admin)]
+        [Authorize(Roles = Roles.Admin + "," + Roles.Organizer)]
+
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var @event = await _context.Events.FindAsync(id);
