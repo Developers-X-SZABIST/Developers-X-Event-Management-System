@@ -8,7 +8,7 @@ namespace Event_Management_System.Models.Entities
 
         public string Username { get; set; }
         public string PasswordHash { get; set; }
-        public string? Email { get; set; }
+        public string Email { get; set; } = default!; 
 
         // 🔹 Hardcoded roles
         public string Role { get; set; }  = Roles.Public;
